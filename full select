@@ -1,0 +1,45 @@
+
+<!--
+<select id="frameSelect" class="fadeIn third mdb-select md-form">
+    <option value="" disabled selected>לאיזה מסגרת אתה שייך?</option>
+    <option>לשכת מפקד המכללות ותא"לים</option>
+    <option>לשכת מפקד פו"ם</option>
+    <option>מב"ל</option>
+    <optgroup label='פו"ם אלון'>
+        <option>לשכה</option>
+        <option>לוגיסטיקה ומודיעין</option>
+        <option>מד"ריה</option>
+        <option>צוות 1</option>
+        <option>צוות 2</option>
+        <option>צוות 3</option>
+        <option>צוות 4</option>
+    </optgroup>
+    <option>פו"ם אפק</option>
+    <option>מלט"ק</option>
+    <option>בית ספר לנגדים</option>
+    <option>מרכז דדו</option>
+    <option>מנהלת התרגילים</option>
+    <option>מערכה מדינית ותחקור</option>
+    <option>משא"ן</option>
+    <option>מערכות</option>
+    <optgroup label="הדרכה">
+        <option>תקשוב</option>
+        <option>תרבות גופנית</option>
+        <option>יע"ל</option>
+        <option>מפקדת ענף, חינוך, תקציבים וב"ם</option>
+        <option>אבטחה</option>
+    </optgroup>
+    <optgroup label='מלו"פ'>
+        <option>טכנולוגיות למידה</option>
+        <option>ספריה</option>
+        <option>מרכז למידה-מב"ל</option>
+        <option>מפקדת ענף</option>
+    </optgroup>
+    <optgroup label='לוגיסטיקה'>
+        <option>רכב</option>
+        <option>אפסנאות</option>
+        <option>מרפאה</option>
+        <option>רס"ר (כולל צוות ניקוי וגינון)</option>
+        <option>מפקדת ענף</option>
+    </optgroup>
+</select> -->
