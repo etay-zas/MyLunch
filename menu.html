@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+    <head>
+        <meta charset="utf-8">
+        <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+        <title>MyLunch | המכללות הצבאיות</title>
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/style.css">
+        <script src="lib/jquery-3.5.0.min.js" type="text/javascript"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="lib/cookie.min.js" type="text/javascript"></script>
+        <!-- <script src="lib/push.min.js" type="text/javascript"></script> -->
+    </head>
+    <body>
+        <!-- https://bootsnipp.com/snippets/dldxB -->
+        <div class="wrapper fadeInDown">
+            <div id="formContent">
+            <!-- Tabs Titles -->
+
+                <!-- Icon -->
+                <div class="fadeIn first">
+                    <h4 class="mt-4 mb-4">MyLunch | לבוא לקחת</h4>
+                </div>
+
+                <!-- Login Form -->
+                <form id="mainForm">
+                    <div class="fadeIn second">
+                        <!-- Group of material radios - option 1 -->
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="materialGroupExample1" value="סלט ניסואז" name="dishRadioInput">
+                            <label class="form-check-label" for="materialGroupExample1">סלט ניסואז</label>
+                        </div>
+
+                        <!-- Group of material radios - option 2 -->
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" id="materialGroupExample2" value="סלט חזה עוף" name="dishRadioInput">
+                            <label class="form-check-label" for="materialGroupExample2">סלט חזה עוף</label>
+                        </div>
+                    </div>
+                    <input type="submit" class="fadeIn third mt-3" value="שלח"></input>
+                </form>
+
+                <!-- Remind Passowrd -->
+                <div id="formFooter">
+                    <a class="underlineHover" href="#">מה נשמע?</a>
+                </div>
+            </div>
+        </div>
+        <script src="lib/popper.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function() {
+                // Redirect - check for Cookies
+                var name = Cookies.get('name');
+                var frame = Cookies.get('frame');
+
+                if (name == undefined || frame == undefined){
+                    document.location.replace("index.html");
+                }
+
+
+                // Submition
+                $('#mainForm').on('submit', function() {
+                    console.log(document.cookie);
+                    var dish = $('input[name="dishRadioInput"]:checked').val();
+                    alert(dish);
+
+                    var spreadsheetId = "103qJwyvJV4Mhnx7agcU74fJES8S0W9nLfvwU8FrvPv8";
+                    var postUrl = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadsheetId + "/values/A:I:append";
+
+                    alert(postUrl);
+
+                    $.post(postUrl, function(data) {
+                      alert(data);
+                    });
+
+                    // POST
+                });
+            });
+        </script>
+    </body>
+</html>
