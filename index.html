@@ -2,36 +2,36 @@
 <html lang="he" dir="rtl">
     <head>
         <meta charset="utf-8">
-        <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
         <title>MyLunch | המכללות הצבאיות</title>
         <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/theme-style.css">
         <link rel="stylesheet" href="lib/style.css">
-        <script src="lib/jquery-3.5.0.min.js" type="text/javascript"></script>
+        <script src="lib/jquery.min.js" type="text/javascript"></script>
         <script src="lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="lib/cookie.min.js" type="text/javascript"></script>
-        <!-- <script src="lib/push.min.js" type="text/javascript"></script> -->
     </head>
     <body>
-        <!-- https://bootsnipp.com/snippets/dldxB -->
+        <!-- Theme Source - https://bootsnipp.com/snippets/dldxB -->
         <div class="wrapper fadeInDown">
             <div id="formContent">
-            <!-- Tabs Titles -->
-
-                <!-- Icon -->
-                <div class="fadeIn first">
-                    <h4 class="mt-4 mb-4">MyLunch | לבוא לקחת</h4>
-                </div>
-
-                <!-- Login Form -->
+                <h4 class="fadeIn first mt-4 mb-4">MyLunch | לבוא לקחת</h4>
                 <form id="mainForm">
-                    <input type="text" class="fadeIn second text-right" id="nameInput" aria-describedby="nameHelp" placeholder="מה שמך?">
-
-                    <select id="frameSelect" class="fadeIn third mdb-select md-form">
-                        <option value="" disabled selected>לאיזה מסגרת אתה שייך?</option>
+                    <input type="text" class="fadeIn second text-right" id="nameInput" placeholder="מה שמך?" required>
+                    <select id="frameSelect" class="fadeIn third text-right text-secondary" required>
+                        <option value="" hidden disabled selected>לאיזה מסגרת אתה שייך?</option>
                         <option>לשכת מפקד המכללות ותא"לים</option>
                         <option>לשכת מפקד פו"ם</option>
                         <option>מב"ל</option>
-                        <option>פו"ם אלון</option>
+                        <optgroup label='פו"ם אלון'>
+                            <option>לשכה</option>
+                            <option>לוגיסטיקה ומודיעין</option>
+                            <option>מד"ריה</option>
+                            <option>צוות 1</option>
+                            <option>צוות 2</option>
+                            <option>צוות 3</option>
+                            <option>צוות 4</option>
+                        </optgroup>
                         <option>פו"ם אפק</option>
                         <option>מלט"ק</option>
                         <option>בית ספר לנגדים</option>
@@ -40,29 +40,40 @@
                         <option>מערכה מדינית ותחקור</option>
                         <option>משא"ן</option>
                         <option>מערכות</option>
-                        <option>הדרכה</option>
-                        <option>מלו"פ</option>
-                        <option>לוגיסטיקה</option>
+                        <optgroup label="הדרכה">
+                            <option>תקשוב</option>
+                            <option>תרבות גופנית</option>
+                            <option>יע"ל</option>
+                            <option>מפקדת ענף, חינוך, תקציבים וב"ם</option>
+                            <option>אבטחה</option>
+                        </optgroup>
+                        <optgroup label='מלו"פ'>
+                            <option>טכנולוגיות למידה</option>
+                            <option>ספריה</option>
+                            <option>מרכז למידה-מב"ל</option>
+                            <option>מפקדת ענף</option>
+                        </optgroup>
+                        <optgroup label='לוגיסטיקה'>
+                            <option>רכב</option>
+                            <option>אפסנאות</option>
+                            <option>מרפאה</option>
+                            <option>רס"ר (כולל צוות ניקוי וגינון)</option>
+                            <option>מפקדת ענף</option>
+                        </optgroup>
                     </select>
-
                     <input type="submit" class="fadeIn fourth mt-3" value="כנס"></input>
                 </form>
-
-                <!-- Remind Passowrd -->
-                <div id="formFooter">
-                    <a class="underlineHover" href="#">מה נשמע?</a>
-                </div>
             </div>
         </div>
-        <script src="lib/popper.min.js" type="text/javascript"></script>
         <script type="text/javascript">
+            $("#frameSelect").on("change", function(){
+                $("#frameSelect").removeClass("text-secondary");
+            });
             $(function() {
-                // Redirect - check for Cookies
+                // Redirection
                 var name = Cookies.get('name');
                 var frame = Cookies.get('frame');
-
-                alert(name + ", " + frame);
-
+                console.log(name + ", " + frame);
                 if (name != undefined && frame != undefined){
                     document.location.replace("menu.html");
                 }
@@ -74,12 +85,10 @@
                     var frame = $('#frameSelect option:selected').val();
                     console.log(name, frame);
 
-                    // Set Cookies
                     Cookies.set('name', name);
                     Cookies.set('frame', frame);
                 });
             });
-
         </script>
     </body>
 </html>

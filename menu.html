@@ -2,75 +2,92 @@
 <html lang="he" dir="rtl">
     <head>
         <meta charset="utf-8">
-        <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
         <title>MyLunch | המכללות הצבאיות</title>
         <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/theme-style.css">
         <link rel="stylesheet" href="lib/style.css">
-        <script src="lib/jquery-3.5.0.min.js" type="text/javascript"></script>
+        <script src="lib/jquery.min.js" type="text/javascript"></script>
         <script src="lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="lib/cookie.min.js" type="text/javascript"></script>
-        <!-- <script src="lib/push.min.js" type="text/javascript"></script> -->
     </head>
     <body>
         <!-- https://bootsnipp.com/snippets/dldxB -->
         <div class="wrapper fadeInDown">
             <div id="formContent">
-            <!-- Tabs Titles -->
-
-                <!-- Icon -->
-                <div class="fadeIn first">
-                    <h4 class="mt-4 mb-4">MyLunch | לבוא לקחת</h4>
-                </div>
-
-                <!-- Login Form -->
+                <h4 class="fadeIn first mt-4 mb-4">MyLunch | לבוא לקחת</h4>
                 <form id="mainForm">
-                    <div class="fadeIn second">
-                        <!-- Group of material radios - option 1 -->
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="materialGroupExample1" value="סלט ניסואז" name="dishRadioInput">
-                            <label class="form-check-label" for="materialGroupExample1">סלט ניסואז</label>
+                    <div class="text-right">
+                        <div class="imgContainer fadeIn second">
+                            <h2 class="">פלפל ממולא</h2>
+                            <img class="menuImg img-fluid" src="img/filled pepper.png" alt="">
+                            <input type="submit" class="fadeIn fourth" data="פלפל ממולא" value="להזמנה"></input>
                         </div>
-
-                        <!-- Group of material radios - option 2 -->
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="materialGroupExample2" value="סלט חזה עוף" name="dishRadioInput">
-                            <label class="form-check-label" for="materialGroupExample2">סלט חזה עוף</label>
+                        <div class="imgContainer fadeIn third">
+                            <h2 class="">עוף</h2>
+                            <img class="menuImg img-fluid" src="img/chicken.png" alt="">
+                            <input type="submit" class="fadeIn fourth" data="עוף" value="להזמנה"></input>
                         </div>
+                        <div class="imgContainer fadeIn fourth">
+                            <h2 class="">שניצל</h2>
+                            <img class="menuImg img-fluid" src="img/schnitzel.png" alt="">
+                            <input type="submit" class="fadeIn fourth" data="שניצל" value="להזמנה"></input>
+                        </div>
+                        <!-- <div class="form-check">
+                            <input type="radio" class="form-check-input" value="שניצל" name="dishRadioInput" required>
+                            <label class="form-check-label">שניצל</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" value="עוף" name="dishRadioInput" required>
+                            <label class="form-check-label">עוף</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input" value="פלפל ממולא" name="dishRadioInput" required>
+                            <label class="form-check-label">פלפל ממולא</label>
+                        </div> -->
                     </div>
-                    <input type="submit" class="fadeIn third mt-3" value="שלח"></input>
+                    <!-- <input type="submit" class="fadeIn third mt-3" value="שלח"></input> -->
                 </form>
-
-                <!-- Remind Passowrd -->
                 <div id="formFooter">
-                    <a class="underlineHover" href="#">מה נשמע?</a>
+                    <a id="logoutLink" class="underlineHover" href="#">מה נשמע?</a>
                 </div>
             </div>
         </div>
-        <script src="lib/popper.min.js" type="text/javascript"></script>
         <script type="text/javascript">
             $(function() {
-                // Redirect - check for Cookies
                 var name = Cookies.get('name');
                 var frame = Cookies.get('frame');
 
+                var line = "לא " + name + " מ" + frame + "?";
+                $("#logoutLink").html(line);
+
+                // Redirection
+                console.log(name + ", " + frame);
                 if (name == undefined || frame == undefined){
-                    document.location.replace("index.html");
+                    // document.location.replace("index.html");
                 }
+
+
+                $("#logoutLink").on("click", function(){
+                    Cookies.remove('name');
+                    Cookies.remove('frame');
+                    document.location.replace("index.html");
+                });
 
 
                 // Submition
                 $('#mainForm').on('submit', function() {
-                    console.log(document.cookie);
-                    var dish = $('input[name="dishRadioInput"]:checked').val();
-                    alert(dish);
+                    var dish = $(this).find('h2:first').val();
+                    var anchorId = $(this).attr('data').val();
+                    alert(anchorId);
 
                     var spreadsheetId = "103qJwyvJV4Mhnx7agcU74fJES8S0W9nLfvwU8FrvPv8";
                     var postUrl = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadsheetId + "/values/A:I:append";
 
-                    alert(postUrl);
+                    console.log(postUrl);
 
                     $.post(postUrl, function(data) {
-                      alert(data);
+                      console.log(data);
                     });
 
                     // POST
