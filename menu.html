@@ -9,74 +9,149 @@
         <script src="lib/jquery.min.js" type="text/javascript"></script>
         <script src="lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="lib/cookie.min.js" type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     </head>
     <body>
         <!-- https://bootsnipp.com/snippets/dldxB -->
+        <!-- https://medium.com/@dmccoy/how-to-submit-an-html-form-to-google-sheets-without-google-forms-b833952cc175 -->
         <div class="wrapper fadeInDown">
             <div id="formContent">
                 <h4 class="fadeIn first mt-4 mb-4">MyLunch | לבוא לקחת</h4>
                 <form id="mainForm">
-                    <div class="text-right">
-                        <div class="imgContainer fadeIn second">
-                            <h2 class="">פלפל ממולא</h2>
-                            <img class="menuImg img-fluid" src="img/filled pepper.png" alt="">
-                            <input type="submit" class="fadeIn fourth" data="פלפל ממולא" value="להזמנה"></input>
-                        </div>
-                        <div class="imgContainer fadeIn third">
-                            <h2 class="">עוף</h2>
-                            <img class="menuImg img-fluid" src="img/chicken.png" alt="">
-                            <input type="submit" class="fadeIn fourth" data="עוף" value="להזמנה"></input>
-                        </div>
-                        <div class="imgContainer fadeIn fourth">
-                            <h2 class="">שניצל</h2>
-                            <img class="menuImg img-fluid" src="img/schnitzel.png" alt="">
-                            <input type="submit" class="fadeIn fourth" data="שניצל" value="להזמנה"></input>
-                        </div>
+                    <div id="ordersContainer" class="text-right">
+
                     </div>
                 </form>
                 <div id="formFooter">
-                    <a id="logoutLink" class="underlineHover" href="#">מה נשמע?</a>
+                    <a id="logoutLink" class="underlineHover" href="#">מזמין עבור אדם אחר?</a>
                 </div>
             </div>
         </div>
+
+
+        <script src="lib/jquery-csv.min.js"></script>
+        <script type="text/javascript">
+            var sheet_url = "https://docs.google.com/spreadsheets/d/10B1xiN8sjfD0KcjOAZ4vPnNviWGReMdj6J1AuFJcYsw/export?format=csv";
+            var orders;
+            $.ajax({
+                url: sheet_url,
+                async: false,
+                success: function (csvd) {
+                    orders = $.csv.toArrays(csvd);
+                },
+                dataType: "text",
+                complete: function (data) {
+                    console.log(orders);
+                }
+            });
+
+            var NAME_INDEX = 1;
+            var FILENAME_INDEX = 0;
+            var ID_INDEX = 2;
+
+            orders.forEach(function (order, index) {
+                var animationIndexClass = "";
+                switch (index) {
+                    case 0:
+                        animation = "second";
+                        break;
+                    case 1:
+                        animation = "third";
+                        break;
+                    case 2:
+                        animation = "fourth";
+                        break;
+                    case 3:
+                        animation = "fifth";
+                        break;
+                    case 4:
+                        animation = "sixth";
+                }
+
+                var imageUrl = "https://drive.google.com/uc?export=download&id=" + order[ID_INDEX];
+                $('#ordersContainer').append('<div class="imgContainer fadeIn ' + animationIndexClass + '"><h2>' + order[NAME_INDEX] + '</h2><img class="menuImg img-fluid" src="' + imageUrl + '" alt=""><input type="submit" class="deliverBtn" name="' + order[NAME_INDEX] + '" value="להזמנה"></input></div>');
+            });
+        </script>
+
         <script type="text/javascript">
             $(function() {
                 var name = Cookies.get('name');
                 var frame = Cookies.get('frame');
+                var subFrame = Cookies.get('subFrame');
 
-                var line = "לא " + name + " מ" + frame + "?";
+                var line;
+                if (subFrame){
+                    line = "לא " + name + " מ" + frame + ", " + subFrame + "?";
+                }
+                else{
+                    line = "לא " + name + " מ" + frame + "?";
+                }
                 $("#logoutLink").html(line);
 
                 // Redirection
                 console.log(name + ", " + frame);
                 if (name == undefined || frame == undefined){
-                    // document.location.replace("index.html");
+                    document.location.replace("index.html");
                 }
 
 
                 $("#logoutLink").on("click", function(){
                     Cookies.remove('name');
                     Cookies.remove('frame');
+                    Cookies.remove('subFrame');
                     document.location.replace("index.html");
                 });
 
+                // Set Data
+                //https://drive.google.com/uc?export=download&id=1oSiqSS6oUiMAF6vSkrRblxaaCayvh1qc
 
-                // Submition
-                $('#mainForm').on('submit', function() {
-                    var dish = $(this).find('h2:first').val();
-                    var anchorId = $(this).attr('data').val();
-                    alert(anchorId);
+                // Submittion
+                $('.deliverBtn').on('click', function(e){
+                    e.preventDefault();
+                    var dish = $(this).attr('name');
 
-                    var spreadsheetId = "103qJwyvJV4Mhnx7agcU74fJES8S0W9nLfvwU8FrvPv8";
-                    var postUrl = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadsheetId + "/values/A:I:append";
+                    // time stamp
+                    var date = new Date();
+                    var options = {weekday: 'long', hour:'2-digit', minute:'2-digit', second:'2-digit'};
+                    var timeStamp = date.toLocaleDateString('he-IL', options);
 
-                    console.log(postUrl);
-
-                    $.post(postUrl, function(data) {
-                      console.log(data);
+                    var submitUrl = 'https://script.google.com/macros/s/AKfycbxuozPKQWh74IJjXhX-BiA0FVyiEB6j_wRMlPkDYNZivMoeZI0/exec'
+                    $.ajax({
+                        url: submitUrl,
+                        method: "GET",
+                        dataType: "json",
+                        data:
+                            [
+                              {
+                                "name": "חותמת זמן",
+                                "value": timeStamp
+                              },
+                              {
+                                "name": "שם",
+                                "value": name
+                              },
+                              {
+                                "name": "מסגרת",
+                                "value": frame
+                              },
+                              {
+                                "name": "תת מסגרת",
+                                "value": subFrame
+                              },
+                              {
+                                "name": "הזמנה",
+                                "value": dish
+                              }
+                            ]
+                    }).done(function() {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'הזמנתך נרשמה!',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
                     });
-
-                    // POST
                 });
             });
         </script>

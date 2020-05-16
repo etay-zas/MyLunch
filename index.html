@@ -69,12 +69,9 @@
                 $("#frameSelect").removeClass("text-secondary");
             });
             $(function() {
-                $(window).trigger('resize');
-
                 // Redirection
                 var name = Cookies.get('name');
                 var frame = Cookies.get('frame');
-                console.log(name + ", " + frame);
                 if (name != undefined && frame != undefined){
                     document.location.replace("menu.html");
                 }
@@ -83,9 +80,18 @@
                 // Submition
                 $('#mainForm').on('submit', function() {
                     var name = $('#nameInput').val();
-                    var frame = $('#frameSelect option:selected').val();
-                    console.log(name, frame);
 
+                    var frame, subFrame;
+                    var selectedOption = $('#frameSelect option:selected').val();
+                    var selectedOptionGroup = $('#frameSelect option:selected').parent().attr('label');
+
+                    if (selectedOptionGroup == undefined)
+                        frame = selectedOption;
+                    else{
+                        frame = selectedOptionGroup;
+                        subFrame = selectedOption;
+                        Cookies.set('subFrame', subFrame);
+                    }
                     Cookies.set('name', name);
                     Cookies.set('frame', frame);
                 });
